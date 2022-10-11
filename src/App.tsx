@@ -1,26 +1,29 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Login from './components/login/Login';
+import Home from './components/home/Home';
+import { LoginResult } from './models/loginResult';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+  const hasTokens = accessToken && refreshToken;
+
+
+  const initalState: LoginResult | null = hasTokens ? { accessToken, refreshToken } : null;
+
+  const [tokens, setTokens] = useState<LoginResult | null>(initalState);
+  const isLogged = useMemo(() => !!tokens && !!tokens.accessToken, [tokens]); 
+
+  const login = (res: LoginResult) => {
+    localStorage.setItem('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    setTokens(res);
+  }
+
+  return isLogged ? <Home/> : <Login OnLogin={res => login(res)}/>;
 }
 
 export default App;
