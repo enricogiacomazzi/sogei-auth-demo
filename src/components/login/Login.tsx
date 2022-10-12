@@ -17,7 +17,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({OnLogin}) => {
 
-    const loginMutation = useMutation<any, any, LoginModel>(
+    const loginMutation = useMutation<LoginResult, any, LoginModel>(
         data => api.login(data.username, data.password));
 
 

@@ -7,7 +7,7 @@ import { LoginResult } from './models/loginResult';
 
 function App() {
 
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
   const hasTokens = accessToken && refreshToken;
 
@@ -18,8 +18,6 @@ function App() {
   const isLogged = useMemo(() => !!tokens && !!tokens.accessToken, [tokens]); 
 
   const login = (res: LoginResult) => {
-    localStorage.setItem('accessToken', res.accessToken);
-    localStorage.setItem('refreshToken', res.refreshToken);
     setTokens(res);
   }
 
